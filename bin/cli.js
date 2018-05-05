@@ -4,7 +4,7 @@ const path = require('path');
 const { copySync } = require('../lib');
 
 const base = __dirname.replace(/bin/, '');
-const copy = path.join(BASE_DIR, 'copy');
+const copy = path.join(base, 'copy');
 const name = process.argv[2];
 const appDir = path.join(process.cwd(), name);
 
