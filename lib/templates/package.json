@@ -2,5 +2,10 @@
   "name": "project-name",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "ISC"
+  "license": "ISC",
+  "scripts": {
+    "start": "node build/main",
+    "dev": "backpack dev",
+    "build": "backpack build"
+  }
 }

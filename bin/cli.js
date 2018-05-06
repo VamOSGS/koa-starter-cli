@@ -4,15 +4,17 @@ const path = require('path');
 const chalk = require('chalk');
 const ora = require('ora');
 const { Command } = require('commander');
-// eslint-disable-next-line
-const { copySync, createPkg, yarnCheck, install } = require('../lib');
 const pkg = require('../package.json');
+// eslint-disable-next-line
+const { copySync, createPkg, yarnCheck, useFlow, install } = require('../lib');
 
 const base = __dirname.replace(/bin/, '');
 const copy = path.join(base, 'copy');
 const tasks = ['Creating directory', ' Creating package.json', 'Installing dependencies'];
+let dependencies = ['chalk'];
 let projectName;
 let projectDir;
+
 const program = new Command('koa-starter')
   .version(pkg.version, '-v, --version')
   .arguments('<project-directory>')
@@ -39,21 +41,30 @@ if (copyDir.done) {
   process.exit();
 }
 
-spinner.start(`[2/${tasks.length}] ${tasks[1]}`);
-createPkg(projectName, projectDir);
-spinner.succeed();
+useFlow().then((use) => {
+  // CREATE PACKAGE.json
+  spinner.start(`[2/${tasks.length}] ${tasks[1]}`);
+  createPkg(projectName, projectDir, use);
+  spinner.succeed();
+  if (use) {
+    dependencies = [...dependencies, ''];
+  }
+});
 
-spinner.start(`[3/${tasks.length}] ${tasks[2]}`);
-const dependencies = ['chalk'];
-if (program.useYarn && yarnCheck()) {
-  console.log(chalk.red('FUCK YOU'));
-  const args = ['add', '--exact', ...dependencies, '--cwd', projectDir];
-  install(args, projectDir, 'yarn').then(() => {
-    spinner.succeed();
-  });
-} else {
-  const args = ['install', '--save', '--save-exact', '--loglevel', 'error', ...dependencies];
-  install(args, projectDir, 'npm').then(() => {
-    spinner.succeed();
-  });
-}
+// INSTALL DEPENDENCIES
+// spinner.start(`[3/${tasks.length}] ${tasks[2]}`);
+// if (program.useYarn) {
+//   if (!yarnCheck()) {
+//     console.log(chalk.red('Yarn missing or you have problems with yarn'));
+//     process.exit();
+//   }
+//   const args = ['add', '--exact', ...dependencies, '--cwd', projectDir];
+//   install(args, projectDir, 'yarn').then(() => {
+//     spinner.succeed();
+//   });
+// } else {
+//   const args = ['install', '--save', '--save-exact', '--loglevel', 'error', ...dependencies];
+//   install(args, projectDir, 'npm').then(() => {
+//     spinner.succeed();
+//   });
+// }
