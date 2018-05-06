@@ -6,11 +6,11 @@ const ora = require('ora');
 const { Command } = require('commander');
 const pkg = require('../package.json');
 // eslint-disable-next-line
-const { copySync, createPkg, yarnCheck, useFlow, install } = require('../lib');
+const { copySync, generateFiles, yarnCheck, useFlow, install } = require('../lib');
 
 const base = __dirname.replace(/bin/, '');
 const copy = path.join(base, 'copy');
-const tasks = ['Creating directory', ' Creating package.json', 'Installing dependencies'];
+const tasks = ['Creating directory', ' Generating files', 'Installing dependencies'];
 let dependencies = ['chalk'];
 let projectName;
 let projectDir;
@@ -44,7 +44,7 @@ if (copyDir.done) {
 useFlow().then((use) => {
   // CREATE PACKAGE.json
   spinner.start(`[2/${tasks.length}] ${tasks[1]}`);
-  createPkg(projectName, projectDir, use);
+  generateFiles(projectName, projectDir, use);
   spinner.succeed();
   if (use) {
     dependencies = [...dependencies, ''];
