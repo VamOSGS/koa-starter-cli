@@ -12,6 +12,7 @@ const base = __dirname.replace(/bin/, '');
 const copy = path.join(base, 'copy');
 const tasks = ['Creating directory', ' Generating files', 'Installing dependencies'];
 let dependencies = ['chalk'];
+const devDependencies = ['colors'];
 let projectName;
 let projectDir;
 
@@ -42,29 +43,42 @@ if (copyDir.done) {
 }
 
 useFlow().then((use) => {
-  // CREATE PACKAGE.json
   spinner.start(`[2/${tasks.length}] ${tasks[1]}`);
   generateFiles(projectName, projectDir, use);
   spinner.succeed();
   if (use) {
-    dependencies = [...dependencies, ''];
+    dependencies = [...dependencies, 'dotenv'];
   }
+  spinner.start(`[3/${tasks.length}] ${tasks[2]}`);
+  installDeps('-D');
+  installDeps('--save');
 });
 
-// INSTALL DEPENDENCIES
-// spinner.start(`[3/${tasks.length}] ${tasks[2]}`);
-// if (program.useYarn) {
-//   if (!yarnCheck()) {
-//     console.log(chalk.red('Yarn missing or you have problems with yarn'));
-//     process.exit();
-//   }
-//   const args = ['add', '--exact', ...dependencies, '--cwd', projectDir];
-//   install(args, projectDir, 'yarn').then(() => {
-//     spinner.succeed();
-//   });
-// } else {
-//   const args = ['install', '--save', '--save-exact', '--loglevel', 'error', ...dependencies];
-//   install(args, projectDir, 'npm').then(() => {
-//     spinner.succeed();
-//   });
-// }
+function installDeps(mode) {
+  const deps = mode === '-D' ? devDependencies : dependencies;
+  if (program.useYarn) {
+    if (!yarnCheck()) {
+      console.log(chalk.red('Yarn missing or you have problems with yarn'));
+      process.exit();
+    }
+    const args = ['add', mode, '--exact', ...deps, '--cwd', projectDir];
+    install(args, projectDir, 'yarn')
+      .then(() => {
+        spinner.succeed();
+      })
+      .catch((err) => {
+        console.log(chalk.red(err));
+        process.exit();
+      });
+  } else {
+    const args = ['install', mode, '--save-exact', '--loglevel', 'error', ...deps];
+    install(args, projectDir, 'npm')
+      .then(() => {
+        spinner.succeed();
+      })
+      .catch((err) => {
+        console.log(chalk.red(err));
+        process.exit();
+      });
+  }
+}
