@@ -9,7 +9,7 @@ const pkg = require('../package.json');
 const { copySync, generateFiles, yarnCheck, useFlow, install } = require('../lib');
 
 const base = __dirname.replace(/bin/, '');
-const copy = path.join(base, 'copy');
+const copy = path.join(base, 'source_copy');
 const tasks = ['Creating directory', ' Generating files', 'Installing dependencies'];
 let dependencies = ['chalk'];
 const devDependencies = ['colors'];
