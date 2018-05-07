@@ -11,16 +11,14 @@ const { copySync, generateFiles, install, useFlow } = require('../lib');
 const base = __dirname.replace(/bin/, '');
 const copy = path.join(base, 'source_copy');
 const tasks = ['Creating directory', ' Generating files', 'Installing dependencies'];
-// let dependencies = ['dotenv', 'koa-compose', 'koa', 'source-map-support', 'koa-router'];
-// const devDependencies = [
-//   '@babel/core',
-//   'babel-eslint',
-//   'backpack-core',
-//   'eslint-config-airbnb-base',
-//   'eslint-plugin-import',
-// ];
-let dependencies = ['dotenv'];
-const devDependencies = ['chalk'];
+let dependencies = ['dotenv', 'koa-compose', 'koa', 'source-map-support', 'koa-router'];
+const devDependencies = [
+  '@babel/core',
+  'babel-eslint',
+  'backpack-core',
+  'eslint-config-airbnb-base',
+  'eslint-plugin-import',
+];
 const flowDeps = ['@babel/plugin-transform-flow-strip-types', 'eslint-plugin-flowtype', 'flow-bin'];
 let projectName;
 let projectDir;
@@ -58,8 +56,9 @@ useFlow().then(async (use) => {
   if (use) {
     dependencies = [...dependencies, ...flowDeps];
   }
-  spinner.start(`[3/${tasks.length}] ${tasks[2]}`);
-  install(projectDir, program.useYarn, dependencies, devDependencies).then(() => {
-    spinner.succeed();
-  });
+  install(projectDir, program.useYarn, dependencies, devDependencies)
+    .then(() => spinner.succeed(`[3/${tasks.length}] ${tasks[2]}`))
+    .then(() => {
+      console.log(`\n ${chalk.green('Your Koa project ready to start')} \n  cd ./${chalk.cyan(projectName)} \n  ${program.useYarn ? 'yarn' : 'npm run'} ${chalk.cyan('dev')} (for starting development server) \n  You can read more about starter pack usage at ${chalk.cyan(`./${projectName}/README.md`)}`);
+    });
 });
