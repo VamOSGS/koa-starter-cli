@@ -9,16 +9,6 @@
 
 ### Usage
 
-### Clone:
-
-```bash
-git clone https://github.com/vamosgs/koa-starter.git
-```
-
-### Environment:
-
-    Change .envEXAMPLE to .env for starting develompent.
-
 ### Routing:
 
 Create your router in src/routes file
@@ -27,7 +17,7 @@ then import it in src/routes/index.js
 example:
 
 ```js
-const newRouter = require("./newRouter");
+const newRouter = require('./newRouter');
 
 const routes = combineRouters([root, newRouter]);
 ```
