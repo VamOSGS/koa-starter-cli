@@ -1,5 +1,9 @@
 # koa-starter-cli
 
+### Koa boilerplate project generator
+
+### Starter pack you can see in [koa-starter]('https://github.com/VamOSGS/koa-starter').
+
 ### Usage
 
 ### Installing:
