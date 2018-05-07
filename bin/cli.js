@@ -6,20 +6,21 @@ const ora = require('ora');
 const { Command } = require('commander');
 const pkg = require('../package.json');
 // eslint-disable-next-line
-const { copySync, generateFiles, yarnCheck, useFlow, install } = require('../lib');
+const { copySync, generateFiles, install, useFlow } = require('../lib');
 
 const base = __dirname.replace(/bin/, '');
 const copy = path.join(base, 'source_copy');
 const tasks = ['Creating directory', ' Generating files', 'Installing dependencies'];
-let dependencies = ['dotenv', 'koa-compose', 'koa', 'source-map-support', 'koa-router'];
-const devDependencies = [
-  '@babel/core',
-  'babel-eslint',
-  'backpack-core',
-  'eslint-config-airbnb-base',
-  'nice',
-  'eslint-plugin-import',
-];
+// let dependencies = ['dotenv', 'koa-compose', 'koa', 'source-map-support', 'koa-router'];
+// const devDependencies = [
+//   '@babel/core',
+//   'babel-eslint',
+//   'backpack-core',
+//   'eslint-config-airbnb-base',
+//   'eslint-plugin-import',
+// ];
+let dependencies = ['dotenv'];
+const devDependencies = ['chalk'];
 const flowDeps = ['@babel/plugin-transform-flow-strip-types', 'eslint-plugin-flowtype', 'flow-bin'];
 let projectName;
 let projectDir;
@@ -50,7 +51,7 @@ if (copyDir.done) {
   process.exit();
 }
 
-useFlow().then((use) => {
+useFlow().then(async (use) => {
   spinner.start(`[2/${tasks.length}] ${tasks[1]}`);
   generateFiles(projectName, projectDir, use);
   spinner.succeed();
@@ -58,35 +59,7 @@ useFlow().then((use) => {
     dependencies = [...dependencies, ...flowDeps];
   }
   spinner.start(`[3/${tasks.length}] ${tasks[2]}`);
-  installDeps('-D');
-  installDeps('--save');
+  install(projectDir, program.useYarn, dependencies, devDependencies).then(() => {
+    spinner.succeed();
+  });
 });
-
-function installDeps(mode) {
-  const deps = mode === '-D' ? devDependencies : dependencies;
-  if (program.useYarn) {
-    if (!yarnCheck()) {
-      console.log(chalk.red('Yarn missing or you have problems with yarn'));
-      process.exit();
-    }
-    const args = ['add', mode, '--exact', ...deps, '--cwd', projectDir];
-    install(args, projectDir, 'yarn')
-      .then(() => {
-        spinner.succeed();
-      })
-      .catch((err) => {
-        console.log(chalk.red(err));
-        process.exit();
-      });
-  } else {
-    const args = ['install', mode, '--save-exact', '--loglevel', 'error', ...deps];
-    install(args, projectDir, 'npm')
-      .then(() => {
-        spinner.succeed();
-      })
-      .catch((err) => {
-        console.log(chalk.red(err));
-        process.exit();
-      });
-  }
-}

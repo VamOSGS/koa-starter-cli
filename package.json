@@ -9,6 +9,20 @@
   },
   "author": "VamOSGS",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/VamOSGS/koa-starter-cli"
+  },
+  "bugs": {
+    "url": "https://github.com/VamOSGS/koa-starter-cli/issues"
+  },
+  "keywords": [
+    "koa",
+    "starter-pack",
+    "koa-cli",
+    "starter-cli",
+    "cli"
+  ],
   "dependencies": {
     "chalk": "^2.4.1",
     "commander": "^2.15.1",
