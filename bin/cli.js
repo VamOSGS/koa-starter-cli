@@ -48,7 +48,6 @@ if (copyDir.done) {
   spinner.fail(`[1/${tasks.length}] ${copyDir.status}`);
   process.exit();
 }
-
 useFlow().then(async (use) => {
   spinner.start(`[2/${tasks.length}] ${tasks[1]}`);
   generateFiles(projectName, projectDir, use);
