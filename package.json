@@ -16,14 +16,9 @@
   "bugs": {
     "url": "https://github.com/VamOSGS/koa-starter-cli/issues"
   },
-  "keywords": [
-    "koa",
-    "starter-pack",
-    "koa-cli",
-    "starter-cli",
-    "cli"
-  ],
+  "keywords": ["koa", "starter-pack", "koa-cli", "starter-cli", "cli"],
   "scripts": {
+    "testProject": "node ./bin/cli testProject --use-yarn --use-flow",
     "test": "mocha"
   },
   "dependencies": {

@@ -11,16 +11,14 @@ const { copySync, generateFiles, install, useFlow } = require('../lib');
 const base = __dirname.replace(/bin/, '');
 const copy = path.join(base, 'source_copy');
 const tasks = ['Creating directory', ' Generating files', 'Installing dependencies'];
-// let dependencies = ['dotenv', 'koa-compose', 'koa', 'source-map-support', 'koa-router'];
-// const devDependencies = [
-//   '@babel/core',
-//   'babel-eslint',
-//   'backpack-core',
-//   'eslint-config-airbnb-base',
-//   'eslint-plugin-import',
-// ];
-let dependencies = ['dotenv'];
-const devDependencies = ['chalk'];
+let dependencies = ['dotenv', 'koa-compose', 'koa', 'source-map-support', 'koa-router'];
+const devDependencies = [
+  '@babel/core',
+  'babel-eslint',
+  'backpack-core',
+  'eslint-config-airbnb-base',
+  'eslint-plugin-import',
+];
 const flowDeps = ['@babel/plugin-transform-flow-strip-types', 'eslint-plugin-flowtype', 'flow-bin'];
 let projectName;
 let projectDir;
